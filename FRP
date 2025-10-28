@@ -1,0 +1,73 @@
+         # FRP
+FRP (Fast Reverse Proxy) – Short Notes
+
+Definition:
+
+FRP is an open-source reverse proxy tool that exposes internal/private servers to the public internet.
+
+Works on a client-server architecture:
+
+:-FRP Server (frps) → Public server with a public IP.
+
+;-FRP Client (frpc) → Private/internal server behind NAT/firewall.
+
+Use Cases:
+
+* Access private servers (SSH, HTTP, databases) remotely.
+
+* expose internal services behind NAT/firewall without modifying security rules.
+
+* Remote development or testing.
+
+
+<h2>Installation on AWS EC2 (Ubuntu 22.04)</h2>
+# Step 1: Launch EC2 Instances
+
+FRP Server: Public subnet, public IP.
+
+FRP Client: Private subnet, no public IP.
+
+Open security group ports:
+
+7000 → FRP server
+
+7500 → Dashboard
+
+Remote ports → Services to expose (e.g., 6000 for SSH)
+
+# Step 2: Download FRP
+
+wget https://github.com/fatedier/frp/releases/latest/download/frp_<version>_linux_amd64.tar.gz
+tar -xzf frp_<version>_linux_amd64.tar.gz
+cd frp_<version>_linux_amd64
+
+# Step 3: Configure FRP Server (frps.ini)
+[common]
+bind_port = 7000
+dashboard_port = 7500
+dashboard_user = admin
+dashboard_pwd = strongpassword
+
+<h3>Start server:</h3>
+./frps -c frps.ini
+
+ # Step 4: Configure FRP Client (frpc.ini)
+[common]
+server_addr = <FRP_SERVER_PUBLIC_IP>
+server_port = 7000
+
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 22
+remote_port = 6000
+
+# Start client:
+./frpc -c frpc.ini
+
+# Now you can SSH to the private EC2 via the FRP server:
+
+ssh -p 6000 ubuntu@<FRP_SERVER_PUBLIC_IP>
+
+
+
