@@ -1,0 +1,93 @@
+# DOCKER AND K3S
+<h2> DOCKER </h2>
+
+:- Docker is a containerization platform that packages applications and dependencies into lightweight containers.
+  Containers run anywhere consistently.
+
+# Key Features:
+
+ .Image-based deployment
+ .Isolation of apps
+.Easy scaling and portability
+
+<h3>Installation on AWS EC2 (Ubuntu 22.04):</h3>
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Docker
+sudo apt install -y docker.io
+
+# Enable Docker
+sudo systemctl enable --now docker
+
+# Add current user to docker group
+sudo usermod -aG docker $USER
+
+
+# K3s
+
+What it is:
+
+K3s is a lightweight Kubernetes distribution by Rancher.
+
+Designed for edge, IoT, and low-resource environments.
+
+Key Features:
+
+Lightweight (<100 MB)
+
+Single binary deployment
+
+Built-in SQLite (optional)
+
+Supports full Kubernetes API
+
+<h3>Installation on AWS EC2 (Ubuntu 22.04):</h3>
+
+# Install K3s
+curl -sfL https://get.k3s.io | sh -
+
+# Check status
+sudo k3s kubectl get nodes
+
+# Optional alias for kubectl
+alias kubectl='sudo k3s kubectl'
+
+
+# Minikube
+
+What it is:
+
+Minikube is a tool to run a single-node Kubernetes cluster locally.
+
+Ideal for development and testing.
+
+Key Features:
+
+Supports multiple drivers (Docker, VirtualBox, KVM)
+
+Quick start for Kubernetes experimentation
+
+Runs locally, minimal setup
+
+<h3>Installation on AWS EC2 (Ubuntu 22.04):</h3>
+# Install dependencies
+sudo apt update && sudo apt install -y curl apt-transport-https conntrack
+
+# Install kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# Install Minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Start Minikube (using Docker driver)
+minikube start --driver=docker
+
+# Verify
+kubectl get nodes
+
+
+
+
