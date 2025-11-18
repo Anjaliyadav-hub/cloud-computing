@@ -1,7 +1,7 @@
          # FRP
 FRP (Fast Reverse Proxy) – Short Notes
 
-Definition:
+<h1>Definition:</h1>
 
 FRP is an open-source reverse proxy tool that exposes internal/private servers to the public internet.
 
